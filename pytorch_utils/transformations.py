@@ -138,6 +138,14 @@ def absolute_to_relative(pose: torch.Tensor, reference: torch.Tensor) -> torch.T
     return affine_to_pose(relative_affine)
 
 
+def relative_to_absolute(relative_pose: torch.Tensor, reference: torch.Tensor) -> torch.Tensor:
+    assert len(relative_pose.size()) > 1, "Missing batch dimension"
+    relative_pose_affine = pose_to_affine(relative_pose)
+    reference_affine = pose_to_affine(reference)
+    absolute_affine = torch.matmul(reference_affine, relative_pose_affine)
+    return affine_to_pose(absolute_affine)
+
+
 def rotation_from_axis_angle(axis: torch.Tensor, angle: torch.Tensor) -> torch.Tensor:
     ct = torch.cos(angle)
     st = torch.sin(angle)

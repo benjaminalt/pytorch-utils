@@ -76,6 +76,12 @@ class TestTransformations(unittest.TestCase):
         self.assertTrue(torch.allclose(transformations.pose_to_affine(reference).matmul(transformations.pose_to_affine(pose_relative)),
                                        transformations.pose_to_affine(pose), atol=1e-7))
 
+    def test_relative_to_absolute(self):
+        reference = torch.tensor([0.07929, -0.49247, 0.22816, 0.72999, -0.13826, -0.13841, -0.65486]).unsqueeze(0)
+        pose_relative = torch.tensor([-0.24321702, 0.35857195, 0.10006929, 0.8246617, 0.11454311, 0.15859707, 0.5307164]).unsqueeze(0)
+        pose = transformations.relative_to_absolute(pose_relative, reference)
+        self.assertTrue(torch.allclose(pose_relative, transformations.absolute_to_relative(pose, reference), atol=1e-7))
+
     def test_quaternion_distance(self):
         q1 = torch.tensor([1, 0, 0, 0], dtype=torch.float32)
         q2 = torch.tensor([0.7071068, 0, 0, 0.7071068], dtype=torch.float32)
