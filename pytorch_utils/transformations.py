@@ -2,6 +2,8 @@ import math
 
 import torch
 
+def is_4_by_4_matrix(t: torch.Tensor):
+    return t.size(-1) == 4 and t.size(-2) == 4
 
 def quaternion_to_rotation_matrix(quat: torch.Tensor) -> torch.Tensor:
     # Normalize quaternion
@@ -124,8 +126,8 @@ def affine_transform(pose_left: torch.Tensor, pose_right: torch.Tensor):
     :param pose_left: Transform in world coordinates, else pose
     :param pose_right: Transform in local coordinates, else pose
     """
-    tf_left = pose_to_affine(pose_left)
-    tf_right = pose_to_affine(pose_right)
+    tf_left = pose_left if len(pose_left.size()) >= 3 and is_4_by_4_matrix(pose_left) else pose_to_affine(pose_left)
+    tf_right = pose_right if len(pose_right.size()) >= 3 and is_4_by_4_matrix(pose_right) else pose_to_affine(pose_right)
     transformed = tf_left.matmul(tf_right)
     return affine_to_pose(transformed)
 
