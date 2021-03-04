@@ -1,0 +1,5 @@
+torch~=1.6.0+cu101
+numpy~=1.19.2
+pyquaternion~=0.9.5
+trimesh~=3.8.8
+matplotlib~=3.3.1
