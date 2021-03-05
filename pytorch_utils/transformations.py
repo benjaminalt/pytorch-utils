@@ -244,3 +244,11 @@ def quaternion_distance(q1: torch.Tensor, q2: torch.Tensor) -> torch.Tensor:
     dot_products = torch.sum(q1_normalized * q2_normalized, -1)
     acos_arg = 2 * (dot_products ** 2) - torch.ones(dot_products.size(), device=dot_products.device)
     return torch.acos(torch.clamp(acos_arg, -1 + 1e-7, 1 - 1e-7))
+
+
+def scale(x, a, b, c, d):
+    """
+    Transform x from the interval [a, b] to the interval [c,d]
+    https://stats.stackexchange.com/a/178629
+    """
+    return (d - c) * ((x - a) / (b - a)) + c
